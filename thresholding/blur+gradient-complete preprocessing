@@ -1,0 +1,27 @@
+# Apply a morphological gradient (dilate the image, erode the image, and take the difference
+# First import OpenCV, NumPY and MatPlotLib as we will use these libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+elKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13,13))
+
+# YOUR CODE HERE
+# Exercise: Use openCV's morphologyEx to generate a gradient using the kernel above
+# Hint: You'll find answers at the bottom of the lab.
+img = cv2.imread("../Images/starfish.png")
+h = 20
+hColor = 20
+# Hint: You'll find answers at the bottom of the lab. 
+    
+# Default values
+templateWindowSize = 7
+searchWindowSize = 21
+    
+blur = cv2.fastNlMeansDenoisingColored(img, None,h,hColor,templateWindowSize,searchWindowSize)
+gradient = cv2.morphologyEx(blur, cv2.MORPH_GRADIENT, elKernel)
+
+# END YOUR CODE HERE
+
+plt.imshow(cv2.cvtColor(gradient, cv2.COLOR_BGR2RGB))
