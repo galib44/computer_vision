@@ -1,0 +1,63 @@
+# Erode smaller artefacts out of the image - play with iterations to see how it works
+    
+# YOUR CODE HERE
+# Exercise: Generate a matrix called eroded using cv2.erode() function over the 'close' matrix.
+# Experiment until your output image is similar to the image below
+# Hint: You'll find answers at the bottom of the lab. 
+# Apply Otsu's method - or you can adjust the level at which thresholding occurs
+# and see what the effect of this is
+# Apply a morphological gradient (dilate the image, erode the image, and take the difference
+# First import OpenCV, NumPY and MatPlotLib as we will use these libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+elKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13,13))
+
+# YOUR CODE HERE
+# Exercise: Use openCV's morphologyEx to generate a gradient using the kernel above
+# Hint: You'll find answers at the bottom of the lab.
+img = cv2.imread("../Images/starfish.png")
+h = 20
+hColor = 20
+# Hint: You'll find answers at the bottom of the lab. 
+    
+# Default values
+templateWindowSize = 7
+searchWindowSize = 21
+    
+blur = cv2.fastNlMeansDenoisingColored(img, None,h,hColor,templateWindowSize,searchWindowSize)
+gradient = cv2.morphologyEx(blur, cv2.MORPH_GRADIENT, elKernel)
+# Convert gradient to grayscale
+gradient = cv2.cvtColor(gradient, cv2.COLOR_BGR2GRAY)
+
+
+# YOUR CODE HERE
+# Exercise: Generate a matrix called otsu using OpenCV's threshold() function.  Use
+# Otsu's method.
+# Hint: You'll find answers at the bottom of the lab.
+_,otsu = cv2.threshold(gradient,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+#otsu = cv2.threshold(gradient, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+
+# END YOUR CODE HERE
+
+       
+# Apply a closing operation - we're using a large kernel here. By all means adjust the size of this kernel
+# and observe the effects
+closingKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (33,33))
+close = cv2.morphologyEx(otsu, cv2.MORPH_CLOSE, closingKernel)
+eroded = cv2.erode(close, None, iterations=6)
+
+
+# END YOUR CODE HERE
+
+plt.imshow(eroded, cmap='gray')
+
+After pre-processing, we did 3 tasks-
+
+1/ OTSU Thresholding - For converting grayscale image to binary
+
+2/ Closing operation (with kernel) - to remove pepper noise
+
+3/ erosion(without kernel) - when number of iteration increases, artifacts(similar to white noise?) reduced
