@@ -1,0 +1,33 @@
+# First import OpenCV, NumPY and MatPlotLib as we will use these libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+
+# Load a color image
+img = cv2.imread("../Images/starfish.png")
+
+# Apply some blurring to reduce noise
+
+# h is the Parameter regulating filter strength for luminance component. 
+# Bigger h value perfectly removes noise but also removes image details, 
+# smaller h value preserves details but also preserves some noise
+
+# Hint: I recommend using larger h and hColor values than typical to remove noise at the
+# expense of losing image details
+
+# Experiment with setting h and hColor to a suitable value.
+
+# Exercise: Insert code here to set values for h and hColor. 
+h = 20
+hColor = 10
+# Hint: You'll find answers at the bottom of the lab. 
+    
+# Default values
+templateWindowSize = 7
+searchWindowSize = 21
+    
+blur = cv2.fastNlMeansDenoisingColored(img, None,h,hColor,templateWindowSize,searchWindowSize)
+    
+plt.imshow(cv2.cvtColor(blur, cv2.COLOR_BGR2RGB))
