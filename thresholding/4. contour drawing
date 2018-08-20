@@ -1,0 +1,49 @@
+p = int(img.shape[1] * 0.05)
+eroded[:, 0:p] = 0
+eroded[:, img.shape[1] - p:] = 0
+
+# YOUR CODE HERE
+# Exercise: Find the contours - just external contours to keep post-processing simple
+# Hint: You'll find answers at the bottom of the lab. 
+(cnting, contours, _) = cv2.findContours(eroded.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# END YOUR CODE HERE
+
+# Sort the candidates by size, and just keep the largest one
+contours = sorted(contours, key=cv2.contourArea, reverse=True)[:1]
+
+# Lets create two images, initially all zeros (i.e. black)
+# One image will be filled with 'Blue' wherever we think there's some starfish
+# The other image will be filled with 'Green' whereever we think there's not some starfish
+h, w, num_c = img.shape
+segmask = np.zeros((h, w, num_c), np.uint8)
+stencil = np.zeros((h, w, num_c), np.uint8)
+
+# I know we've only one contour, but - in general - we'd expect to have more contours to deal with
+for c in contours:
+    # Fill in the starfish shape into segmask
+    cv2.drawContours(segmask, [c], 0, (255, 0, 0), -1)
+    # Lets fill in the starfish shape into stencil as well
+    # and then re-arrange the colors using numpy
+    cv2.drawContours(stencil, [c], 0, (255, 0, 0), -1)
+    stencil[np.where((stencil==[0,0,0]).all(axis=2))] = [0, 255, 0]
+    stencil[np.where((stencil==[255,0,0]).all(axis=2))] = [0, 0, 0]
+
+# Now, lets create a mask image by bitwise ORring segmask and stencil together
+mask = cv2.bitwise_or(stencil, segmask)
+
+plt.imshow(cv2.cvtColor(mask, cv2.COLOR_BGR2RGB))
+
+# Now, lets just blend our original image with our mask
+
+# YOUR CODE HERE
+# Exercise: Blend the original image 'img' and our mask 'mask'
+# in any way you see fit, and store it in a variable called output
+# Hint: You'll find answers at the bottom of the lab. 
+output = cv2.bitwise_or(mask, img)
+
+# END YOUR CODE HERE
+
+plt.imshow(cv2.cvtColor(output, cv2.COLOR_BGR2RGB))
+
+
+#finding and drawing contour
