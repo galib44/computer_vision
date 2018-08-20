@@ -1,3 +1,3 @@
 # computer_vision
 Projects
-basic thresholding
+5 families of algorithms gathered here
