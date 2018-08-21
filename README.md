@@ -1,4 +1,4 @@
 # computer_vision
 Projects
-5 families of algorithms gathered here
-Some python basics included
+1/ 5 families of algorithms gathered here
+2/ Some python basics included
