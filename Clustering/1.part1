@@ -1,0 +1,17 @@
+# First import OpenCV, NumPY and MatPlotLib as we will use these libraries
+import cv2
+import numpy as np
+from PIL import Image 
+
+  ''' reading about Image module : https://pillow.readthedocs.io/en/3.1.x/reference/Image.html
+  The Image module provides a class with the same name which is used to represent a PIL image. 
+  The module also provides a number of factory functions, including functions to load images from files, and to create new images.'''
+  
+import matplotlib.pyplot as plt
+from tqdm import * 
+
+  ''' reading about tqdm : https://pypi.org/project/tqdm/
+  Instantly make your loops show a smart progress meter - 
+  just wrap any iterable with tqdm(iterable), and you’re done!'''
+  
+%matplotlib inline
