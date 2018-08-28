@@ -15,3 +15,18 @@ from tqdm import *
   just wrap any iterable with tqdm(iterable), and you’re done!'''
   
 %matplotlib inline
+
+'''let's open an image, convert it to features,
+and store two copies of those features -
+one set is for our own implementation of K-means and the second set is for OpenCV's K-means.'''
+
+# Let's use starfish.  I've picked up a blurred version of our starfish
+# to make it a little easier for K-means to segment into two clusters.
+
+img = Image.open("../Images/starfish_blur.png")
+
+# Store the image's width and height for later use. 
+imgWidth = img.size[0]
+imgHeight = img.size[1]
+
+
