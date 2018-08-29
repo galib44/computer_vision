@@ -1,3 +1,13 @@
+'''
+        Now, lets turn our attention to another key data structure that we'll use --> clusterCentres.
+
+We'll need to create an array of clusterCenters.  In our example, 'K' = 2, i.e. we're separating into two clusters. 
+So, we'll need two clusterCentres.  Each cluster center must contain information about each of our features.
+
+We have 7 features, so we end up with a structure containing 2 vectors, each vector containing 7 elements.'''
+
+
+
 # For this example, we are going to divide into two clusters.
 # So, k = 2
 K = 2
