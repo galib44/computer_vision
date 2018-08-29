@@ -50,3 +50,8 @@ for y in tqdm(range(0, imgHeight), ascii=True):
 # We need a second copy of our initial vector
 # for OpenCV's K-means implementation.
 Z2 = Z.copy()
+
+'''
+    At this point, we've effectively assembled 'Z' which contains 7 columns
+    (blue, red, green, an x position divided by 10, a y position divided by 10,
+    a term representing red-blue and a term representing red-green) and contains a row for each pixel in the image'''
