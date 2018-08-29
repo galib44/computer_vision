@@ -1,0 +1,22 @@
+# For this example, we are going to divide into two clusters.
+# So, k = 2
+K = 2
+
+# Create our cluster centers.
+
+# clusterCenter is an arrangement of 'K' vectors
+# each vector 'contains' our 7 columns or features that we described 
+# in the preceding code block.
+# For example, eventually, clusterCenters[0][0] will contain
+# the mean of the 'blue's in cluster 0 and clusterCenters[0][1] will
+# contain the mean of the 'red's in cluster 0, etc.
+clusterCenters = np.ndarray(shape=(K,numFeatures))
+
+# Initialise each element of both of our vectors 
+# to rand values (each random number being between the max'es & mins of that feature in Z)
+maxVals = np.amax(Z)
+minVals = np.amin(Z)
+for i, _ in enumerate(clusterCenters):
+        clusterCenters[i] = np.random.uniform(minVals, maxVals, numFeatures)
+
+# So now we have created our cluster Centers and initialized each clusterCenter's vector
