@@ -1,1 +1,23 @@
+'''
+  Now we must create a data vector which has one entry for every pixel in the original image.
+We make this data vector contain integers as we plan to use it to remember what cluster
+each pixel in the image belongs to (either 0 or 1).'''
+
+# Let's create a data vector with an integer to represent whatever cluster a pixel belongs to. 
+# We need one entry for each pixel - so that's a total of imgWidth * imgHeight's entries.
+pixelClusterMembership = np.ndarray(shape=(imgWidth * imgHeight), dtype = int)
+
+'''
+  Now that we have created the data structures we need, we can start to implement the
+algorithm.
+
+We will iterate over the entire process 10 times - as it can be slow to run this many computations
+in Python.
+
+In each iteration, we will:
+a) assign each pixel to either cluster 0 or cluster 1 (using Euclidean distance from the clusterCenters as our measure)
+b) calculate the mean of the pixels in each cluster to form a new pair of clusterCenters.
+
+This might take up to one minute to run.'''
+
 
