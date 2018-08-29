@@ -20,4 +20,86 @@ b) calculate the mean of the pixels in each cluster to form a new pair of cluste
 
 This might take up to one minute to run.'''
 
+iterations = 20
+
+# For each iteration:
+for iteration in tqdm(range(iterations), ascii=True):
+    # Part 1: Set each pixel to its cluster
+    
+    # use numpy to efficiently subtract both cluster 
+    # center's vectors from all of the vectors representing
+    # the pixels in the image.
+    distances = Z[:,None,:] - clusterCenters[None,:,:]
+    
+    # Square every element in distances
+    distances_sq = distances**2
+    
+    # Get the sums of the squared vectors
+    distance_sum = np.sum(distances_sq, axis=2)
+    
+    # get the square root of those sums
+    distance = np.sqrt(distance_sum)
+
+    # Pick the indexes of the elements with the smaller of 
+    # the two distances for each point
+    pixelClusterMembership = np.argmin(distance, axis=1)
+    print(pixelClusterMembership.shape)
+       
+    # Part 2: update each cluster's centroid
+    #print('clusterCenters.shape: ', clusterCenters.shape)
+    for i in range(K):
+        # Create an empty list of pixels in this cluster
+        pixelsInCluster = []
+
+        # For each pixel, retrieve it's cluster membership
+        for index, item in enumerate(pixelClusterMembership):
+            # if it is member of the current cluster of interest
+            if item == i:
+                # add it's features to the list of pixels in the cluster
+                pixelsInCluster.append(Z[index])
+
+        if len(pixelsInCluster) == 0:
+            pixelsInCluster.append(Z[0])
+
+        # Now, for each cluster, simply get the mean of each of its 7 features
+        pixelsInCluster = np.array(pixelsInCluster)
+        print(pixelsInCluster.shape)
+        clusterCenters[i] = np.mean(pixelsInCluster, axis=0)
+        
+        # Let's display an image based around what we've just done
+# and convince ourselves its segmenting reasonably well (albeit slowly :-)
+            
+# Let's (effectively) replace every pixel in the original image
+# with the rgb values from the mean of the cluster that pixel
+# is now in.
+outVec = np.ndarray(shape=(imgWidth * imgHeight, 3), dtype = int)
+for index, item in enumerate(tqdm(pixelClusterMembership)):
+    outVec[index][0] = int(round(clusterCenters[item][2]))
+    outVec[index][1] = int(round(clusterCenters[item][1]))
+    outVec[index][2] = int(round(clusterCenters[item][0]))
+
+# Save and display image
+img = Image.new("RGB", (imgWidth, imgHeight))
+
+for y in tqdm(range(imgHeight), ascii=True):
+    for x in range(imgWidth):
+        img.putpixel((x, y), (int(outVec[y*imgWidth + x][0]), int(outVec[y * imgWidth + x][1]), int(outVec[y * imgWidth + x][2])))
+
+#plt.figure(figsize=(14, 10), dpi=80)
+plt.imshow(img)
+
+# OpenCV's K-means 
+criteria = (cv2.TERM_CRITERIA_MAX_ITER, i+1, 0.1)
+ret, label, center = cv2.kmeans(Z2,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS)
+
+# Convert center back into unsigned bytes
+center = np.uint8(center)
+
+# reshape the RGB values from our cv2.kmeans results into
+# an image.
+rgb = center[:,0:3]
+res = rgb[label.flatten()]
+img = res.reshape((imgHeight,imgWidth, 3))
+
+plt.imshow(img)
 
